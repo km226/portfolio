@@ -878,9 +878,7 @@ a{color:inherit}
     cli: {
       title: 'STM32F411 임베디드 CLI 셸',
       path: 'projects / stm32f411-cli',
-      period: '개인 프로젝트',
-      periodLabel: '구분',
-      role: '펌웨어 설계 및 구현 전반',
+      note: 'UART 터미널에서 CLI로 GPIO·센서를 다루는 임베디드 셸',
       repo: 'https://github.com/km226/stm32f411_cli',
       tabs: ['개요', '설계 및 구현'],
       tpl: 'tpl-cli'
@@ -963,8 +961,10 @@ a{color:inherit}
       '<div class="win-head">' +
         '<h3>' + d.title + '</h3>' +
         '<div class="meta">' +
-          '<div><span>' + (d.periodLabel || '기간') + '</span>' + d.period + '</div>' +
-          '<div><span>담당</span>' + d.role + '</div>' +
+          (d.note
+            ? '<div>' + d.note + '</div>'
+            : '<div><span>기간</span>' + d.period + '</div>' +
+              '<div><span>담당</span>' + d.role + '</div>') +
         '</div>' +
       '</div>' +
       '<div class="tabs" role="tablist">' +

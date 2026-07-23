@@ -549,6 +549,56 @@ a{color:inherit}
         </div>
       </div>
 
+      <!-- ===== 05 ===== -->
+      <div class="proj" role="button" tabindex="0" data-open="maze" aria-label="SDL2 2D 미로 탐색 게임 기술서 열기">
+        <svg class="thumb" viewBox="0 0 480 260" aria-hidden="true">
+          <rect width="480" height="260" fill="#0D1015"/>
+          <g stroke="#1E2733" stroke-width="1">
+            <path d="M0 40H480M0 80H480M0 120H480M0 160H480M0 200H480M0 240H480"/>
+            <path d="M40 0V260M80 0V260M120 0V260M160 0V260M200 0V260M240 0V260M280 0V260M320 0V260M360 0V260M400 0V260M440 0V260"/>
+          </g>
+          <!-- 시야 밖 영역(검은 안개) -->
+          <rect x="0" y="0" width="480" height="260" fill="#000000" opacity="0.86"/>
+          <!-- 벽 -->
+          <g fill="#1E1E3C" stroke="#38414F" stroke-width="1">
+            <rect x="120" y="0" width="40" height="120"/>
+            <rect x="200" y="40" width="40" height="160"/>
+            <rect x="280" y="0" width="40" height="80"/>
+            <rect x="360" y="80" width="40" height="180"/>
+          </g>
+          <!-- 길(밝은 회색, 시야 원 안쪽만 보인다는 느낌) -->
+          <g fill="#DCDCDC" opacity="0.9">
+            <rect x="40" y="80" width="40" height="40"/>
+            <rect x="80" y="80" width="40" height="40"/>
+            <rect x="80" y="120" width="40" height="40"/>
+          </g>
+          <!-- 원형 시야 -->
+          <circle cx="100" cy="120" r="72" fill="url(#mazeVision)"/>
+          <defs>
+            <radialGradient id="mazeVision" cx="50%" cy="50%" r="50%">
+              <stop offset="55%" stop-color="#000000" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#000000" stop-opacity="0.55"/>
+            </radialGradient>
+          </defs>
+          <!-- 플레이어 -->
+          <rect x="86" y="106" width="28" height="28" rx="5" fill="#D08B4C" stroke="#8A5A2E" stroke-width="1.6"/>
+          <!-- 도착점(우하단, 안개 위로 살짝 표시) -->
+          <rect x="400" y="200" width="40" height="40" fill="#0EA25A" opacity="0.9"/>
+          <text x="420" y="225" font-family="monospace" font-size="9.5" fill="#0B2E1C" text-anchor="middle">EXIT</text>
+          <text x="20" y="252" font-family="monospace" font-size="9.5" fill="#6B7383">LIMITED VISION · RANDOM MAZE</text>
+        </svg>
+        <div class="proj-body">
+          <span class="idx">PROJECT 05 · 개인 프로젝트</span>
+          <h3>SDL2 2D 미로 탐색 게임</h3>
+          <p>무작위로 생성된 미로를 제한된 시야만으로 탐색해 도착점까지 이동하는 SDL2 기반 2D 게임. 미로 생성·시야·이동·렌더링을 각각 함수로 분리해 구현</p>
+          <div class="tags">
+            <span class="tag core">C</span><span class="tag">SDL2</span>
+            <span class="tag core">SDL_image</span><span class="tag">2D 배열</span>
+          </div>
+          <span class="open">기술서 열기</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -846,6 +896,62 @@ a{color:inherit}
   </div>
 </template>
 
+<template id="tpl-maze">
+  <div class="pane on" data-pane="0">
+    <p>2차원 배열 기반 미로에서 플레이어가 시작점부터 도착점까지 이동하는 탐색 게임을 개인 프로젝트로 제작함. 콘솔 출력이 아닌 SDL2 그래픽 인터페이스로 구현해 몰입도를 높이고, 플레이어를 이미지로 표현해 시각적 완성도를 높임. 시야를 플레이어 주변 일정 범위로 제한해 단순한 길찾기를 넘어 탐험형 게임의 느낌을 더함.</p>
+    <h4>구현한 기능</h4>
+    <ul>
+      <li><strong>미로 자동 생성</strong> — 2차원 배열로 미로를 구성하고, 시작점 → 도착점까지 반드시 이동 가능한 경로를 보장. 실행할 때마다 랜덤하게 생성</li>
+      <li><strong>플레이어 이동</strong> — W/A/S/D 키 입력으로 이동, 벽 충돌 및 배열 범위 이탈 방지</li>
+      <li><strong>부분 시야 시스템</strong> — 플레이어를 중심으로 한 원형 범위만 시야 확보, 나머지는 검은색으로 가림</li>
+      <li><strong>그래픽 출력</strong> — 벽 / 길 / 도착점을 색상으로 구분해 격자로 시각화, SDL_image로 플레이어 PNG 이미지 출력</li>
+      <li><strong>도착 판정 및 종료</strong> — 도착점 도달 시 전체 맵을 공개한 뒤 2초 후 프로그램 종료</li>
+    </ul>
+    <h4>사용 기술</h4>
+    <div class="stack-list">
+      <span class="tag core">C</span><span class="tag core">SDL2</span>
+      <span class="tag">SDL_image</span><span class="tag">2D 배열</span>
+    </div>
+  </div>
+
+  <div class="pane" data-pane="1">
+    <h4>1) 코드 구조 분리</h4>
+    <p>단일 파일로 작성했던 코드를 기능 단위로 나눠 <code>maze.h</code>(상수·전역 변수·함수 선언), <code>maze.c</code>(미로 생성·시야·이동 로직), <code>render.c</code>(SDL 렌더링), <code>main.c</code>(초기화 및 이벤트 루프)로 분리함.</p>
+    <h4>2) 미로 생성 알고리즘</h4>
+    <p>모든 칸을 벽으로 채운 뒤, 시작점(0,0)에서 도착점(N-1, N-1)까지 매 스텝마다 아래 또는 오른쪽 중 하나로 랜덤 이동하며 지나간 칸을 길로 뚫어 반드시 도달 가능한 경로를 하나 확보함. 이후 나머지 벽 칸을 25% 확률로 추가 개방해 분기와 우회로를 만듦.</p>
+    <h4>3) 원형 시야 시스템</h4>
+    <p>플레이어 좌표 <code>(px, py)</code>를 기준으로 <code>range</code> 이내의 칸 중 유클리드 거리 제곱이 <code>range²</code> 이하인 칸만 <code>VISIBLE</code>로 표시하는 방식으로 사각형이 아닌 원형 시야를 구현함.</p>
+    <p class="formula">(i - px)² + (j - py)² ≤ range²</p>
+    <h4>4) 이동 및 렌더링</h4>
+    <ul>
+      <li>이동 요청 시 임시 좌표로 먼저 계산한 뒤, 배열 범위와 벽 여부를 검사하고 통과한 경우에만 실제 좌표를 갱신하고 시야를 재계산함.</li>
+      <li>매 프레임 전체 미로를 순회하며 시야가 <code>HIDDEN</code>인 칸은 검은색으로, 보이는 칸은 벽/길/도착점 색상으로 채우고 플레이어 칸에는 <code>SDL_RenderCopy</code>로 PNG 이미지를 덧그림.</li>
+    </ul>
+  </div>
+
+  <div class="pane" data-pane="2">
+    <div class="issue">
+      <strong>1) 경로 생성 방식의 구조적 편향</strong>
+      <p>시작점에서 도착점까지 항상 아래 또는 오른쪽으로만 이동하며 경로를 뚫는 방식이라, 이후 랜덤 개방을 추가해도 전체적으로 비슷한 대각선 형태의 구조로만 미로가 만들어짐. 실제 미로 탐색보다는 단순한 길찾기 게임에 가까운 느낌이 드는 원인이 됨.</p>
+      <p class="fix">→ DFS/백트래킹 기반 미로 생성 알고리즘으로 교체하면 매번 다른 형태의 분기와 막다른 길을 가진 미로를 만들 수 있다고 판단, 향후 개선 과제로 남김</p>
+    </div>
+    <div class="issue">
+      <strong>2) 난이도 조절 기능 부재</strong>
+      <p>미로 크기(N)와 시야 범위(range)가 코드에 상수로 고정되어 있어, 플레이 중 난이도를 조절할 방법이 없음.</p>
+      <p class="fix">→ 실행 인자나 메뉴 화면을 추가해 미로 크기·시야 범위를 선택할 수 있도록 확장할 계획</p>
+    </div>
+  </div>
+
+  <div class="pane" data-pane="3">
+    <ul>
+      <li>조건문과 반복문, 2차원 배열을 활용해 미로 생성부터 이동·충돌 판정까지 하나의 흐름으로 구현하며 배열 인덱싱과 경계 조건 처리에 익숙해짐.</li>
+      <li>기능별로 함수를 분리해두면(미로 생성 / 시야 / 이동 / 렌더링) 이후 파일을 나눌 때도 책임이 명확해 구조를 이해하기 쉬워진다는 것을 체감함.</li>
+      <li>콘솔 출력이 아닌 SDL2로 그래픽을 직접 그려보며, 외부 그래픽 라이브러리를 초기화하고 렌더 루프를 구성하는 기본적인 흐름(윈도우 → 렌더러 → 텍스처 → 렌더 루프)을 익힘.</li>
+      <li>경로 생성 알고리즘을 단순하게 설계하면 결과물이 의도한 것보다 예측 가능한 패턴으로 반복될 수 있다는 것을 직접 플레이해보며 깨달음.</li>
+    </ul>
+  </div>
+</template>
+
 <script>
 (function () {
   'use strict';
@@ -882,6 +988,13 @@ a{color:inherit}
       repo: 'https://github.com/km226/stm32f411_cli',
       tabs: ['개요', '설계 및 구현'],
       tpl: 'tpl-cli'
+    },
+    maze: {
+      title: 'SDL2 2D 미로 탐색 게임',
+      path: 'projects / sdl2-maze-explorer',
+      note: '제한된 시야로 무작위 미로를 탐색하는 SDL2 기반 2D 게임',
+      repo: 'https://github.com/km226/sdl2-maze-explorer',
+      tpl: 'tpl-maze'
     }
   };
   var TABS = ['개요', '설계 및 구현', '고찰', '배운점'];

@@ -787,8 +787,8 @@ a{color:inherit}
 
 <template id="tpl-cli">
   <div class="pane on" data-pane="0">
-    <p>임베디드 개발 중에는 코드를 수정하고 다시 빌드·플래싱해야만 동작을 확인할 수 있어, 핀 상태 확인이나 값 측정 같은 단순한 작업에도 반복 비용이 크다. 보드에 올려둔 채로 UART 터미널에서 직접 명령을 내려 하드웨어를 조작하고 상태를 확인할 수 있는 CLI 셸을 만들었다.</p>
-    <p>STM32F411RE에서 FreeRTOS로 CLI·LED·온도 측정·모니터링을 4개 태스크로 분리해 동작시키고, UART 수신은 인터럽트가 메시지 큐에 적재하면 CLI 태스크가 블로킹 대기로 받아 처리한다. 폴링이 없어 유휴 상태에서 CPU를 점유하지 않는다.</p>
+    <p>임베디드 개발 중에는 코드를 수정하고 다시 빌드·플래싱해야만 동작을 확인할 수 있어, 핀 상태 확인이나 값 측정 같은 단순한 작업에도 반복 비용이 큼. 보드에 올려둔 채로 UART 터미널에서 직접 명령을 내려 하드웨어를 조작하고 상태를 확인할 수 있는 CLI 셸을 제작함.</p>
+    <p>STM32F411RE에서 FreeRTOS로 CLI·LED·온도 측정·모니터링을 4개 태스크로 분리해 동작시키고, UART 수신은 인터럽트가 메시지 큐에 적재하면 CLI 태스크가 블로킹 대기로 받아 처리함. 폴링이 없어 유휴 상태에서 CPU를 점유하지 않음.</p>
     <h4>구현한 기능</h4>
     <ul>
       <li><strong>런타임 명령어 등록</strong> — <code>cliAdd()</code>로 함수 포인터를 테이블에 등록. 명령어를 추가해도 파서·디스패처를 수정할 필요 없음</li>
@@ -810,7 +810,7 @@ a{color:inherit}
 
   <div class="pane" data-pane="1">
     <h4>1) 계층 분리</h4>
-    <p><code>ap</code> / <code>hw</code> / <code>bsp</code> / <code>common</code> 4계층으로 나눠 애플리케이션 로직과 하드웨어 의존성을 격리했다. 직접 작성한 코드는 <code>MyApp/</code> 하위에 모으고, CubeMX·HAL 생성 코드와 분리해 관리한다.</p>
+    <p><code>ap</code> / <code>hw</code> / <code>bsp</code> / <code>common</code> 4계층으로 나눠 애플리케이션 로직과 하드웨어 의존성을 격리함. 직접 작성한 코드는 <code>MyApp/</code> 하위에 모으고, CubeMX·HAL 생성 코드와 분리해 관리함.</p>
     <ul>
       <li><strong>ap</strong> — CLI 명령어 구현, FreeRTOS 태스크 본체, 텔레메트리 프로토콜</li>
       <li><strong>hw/driver</strong> — 명령어 파서, UART 래퍼, 로그, 런타임 GPIO, ADC 온도, EXTI 콜백</li>
@@ -833,16 +833,16 @@ a{color:inherit}
     </ul>
 
     <h4>3) 태스크 간 결합 분리</h4>
-    <p><code>monitor</code>는 <code>ap</code> 계층을 직접 호출하지 않고 콜백(<code>monitorSetSyncHandler</code>)으로 주기 동기화를 요청한다. CLI의 <code>Ctrl+C</code> 처리도 같은 방식(<code>cliSetCtrlHandler</code>)으로 상위 계층에 위임해, 하위 모듈이 상위 모듈을 참조하지 않도록 구성했다.</p>
+    <p><code>monitor</code>는 <code>ap</code> 계층을 직접 호출하지 않고 콜백(<code>monitorSetSyncHandler</code>)으로 주기 동기화를 요청함. CLI의 <code>Ctrl+C</code> 처리도 같은 방식(<code>cliSetCtrlHandler</code>)으로 상위 계층에 위임해, 하위 모듈이 상위 모듈을 참조하지 않도록 구성함.</p>
 
     <h4>4) 텔레메트리 프로토콜</h4>
-    <p>호스트 측 스크립트나 시각화 도구에서 파싱하기 쉽도록 ASCII 포맷으로 정의했다.</p>
+    <p>호스트 측 스크립트나 시각화 도구에서 파싱하기 쉽도록 ASCII 포맷으로 정의함.</p>
     <p class="formula">$&lt;노드수&gt;,&lt;ID&gt;:&lt;타입&gt;:&lt;값&gt;,&lt;ID&gt;:&lt;타입&gt;:&lt;값&gt;...#</p>
     <p class="formula">$2,50:3:1,10:2:24.53#   →   ID 50(LED, BOOL)=1,  ID 10(온도, FLOAT)=24.53</p>
-    <p>센서 ID를 대역별로 나눠(시스템 0~9, 환경 10~29, 입력 30~49, 액추에이터 50~69, 모션 70~89, 알람 100+) 종류가 늘어나도 충돌하지 않도록 했다. 바이너리 모드(STX/ETX, XOR 체크섬)용 구조체와 상수도 함께 정의해 확장 여지를 남겼다.</p>
+    <p>센서 ID를 대역별로 나눠(시스템 0~9, 환경 10~29, 입력 30~49, 액추에이터 50~69, 모션 70~89, 알람 100+) 종류가 늘어나도 충돌하지 않도록 함. 바이너리 모드(STX/ETX, XOR 체크섬)용 구조체와 상수도 함께 정의해 확장 여지를 남김.</p>
 
     <h4>5) 안전한 메모리 접근</h4>
-    <p>메모리 덤프 명령은 접근 전 주소 유효성을 검사해 Flash / SRAM / System Memory / Peripheral 영역만 허용한다. 잘못된 주소 입력으로 HardFault가 발생하는 것을 사전에 차단했다.</p>
+    <p>메모리 덤프 명령은 접근 전 주소 유효성을 검사해 Flash / SRAM / System Memory / Peripheral 영역만 허용함. 잘못된 주소 입력으로 HardFault가 발생하는 것을 사전에 차단함.</p>
   </div>
 </template>
 

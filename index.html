@@ -242,6 +242,60 @@ a{color:inherit}
 .win-ctl:hover{color:var(--text); background:#2A313D; border-color:var(--line-2)}
 .win-ctl.close:hover,.win-ctl.close:active{color:#fff; background:#C4453D; border-color:#C4453D}
 
+/* ---------- CONTACT ---------- */
+.contact-wrap{position:relative}
+.contact-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:12.5px; letter-spacing:.06em;
+  padding:7px 16px; border-radius:99px; cursor:pointer;
+  background:var(--panel-2); border:1px solid var(--line-2); color:var(--muted);
+  transition:color .16s, border-color .16s, background .16s;
+}
+.contact-btn:hover{color:var(--text); border-color:var(--copper)}
+.contact-btn[aria-expanded="true"]{color:var(--copper); border-color:var(--copper); background:#262D38}
+.contact-btn .dot{width:6px; height:6px; border-radius:50%; background:var(--solder); flex:none}
+
+.contact-pop{
+  position:absolute; right:0; top:calc(100% + 12px); z-index:90;
+  width:min(320px, calc(100vw - 40px));
+  background:var(--panel); border:1px solid var(--line-2); border-radius:10px;
+  box-shadow:0 26px 60px -26px rgba(0,0,0,.92);
+  padding:18px 18px 16px;
+  animation:popIn .16s cubic-bezier(.2,.9,.3,1);
+}
+.contact-pop[hidden]{display:none}
+@keyframes popIn{from{opacity:0; transform:translateY(-6px)}}
+.contact-pop::before{
+  content:""; position:absolute; right:26px; top:-6px; width:10px; height:10px;
+  background:var(--panel); border-left:1px solid var(--line-2); border-top:1px solid var(--line-2);
+  transform:rotate(45deg);
+}
+.cp-label{
+  display:block; font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--copper); margin-bottom:14px;
+}
+.cp-row{display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--line)}
+.cp-row:first-of-type{border-top:0; padding-top:0}
+.cp-ico{width:16px; height:16px; fill:var(--dim); flex:none}
+.cp-val{
+  flex:1; font-family:var(--mono); font-size:13px; color:var(--text);
+  text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  transition:color .16s;
+}
+.cp-val:hover{color:var(--copper)}
+.cp-copy{
+  flex:none; font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  padding:5px 10px; border-radius:6px; cursor:pointer;
+  background:none; border:1px solid var(--line-2); color:var(--dim);
+  transition:color .16s, border-color .16s;
+}
+.cp-copy:hover{color:var(--text); border-color:var(--line-2)}
+.cp-copy.done{color:var(--solder); border-color:var(--solder)}
+@media(max-width:520px){
+  .contact-pop{position:fixed; right:16px; left:16px; width:auto; top:64px}
+  .contact-pop::before{right:32px}
+}
+
 /* TASKBAR */
 .taskbar{
   position:fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:110;
@@ -283,6 +337,24 @@ a{color:inherit}
 <header class="topbar">
   <div class="wrap">
     <a class="brand" href="#top">KKM<i>_</i>DEV</a>
+    <div class="contact-wrap">
+      <button class="contact-btn" type="button" id="contactBtn" aria-expanded="false" aria-controls="contactPop">
+        <span class="dot"></span>Contact
+      </button>
+      <div class="contact-pop" id="contactPop" hidden>
+        <span class="cp-label">Contact</span>
+        <div class="cp-row">
+          <svg class="cp-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 4.8-8-4.8V6l8 4.8L20 6z"/></svg>
+          <a class="cp-val" href="mailto:0226kkm@naver.com">0226kkm@naver.com</a>
+          <button class="cp-copy" type="button" data-copy="0226kkm@naver.com">복사</button>
+        </div>
+        <div class="cp-row">
+          <svg class="cp-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.25 1z"/></svg>
+          <a class="cp-val" href="tel:01047136112">010-4713-6112</a>
+          <button class="cp-copy" type="button" data-copy="010-4713-6112">복사</button>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -1311,6 +1383,46 @@ a{color:inherit}
     el.focus();
   }
 
+  /* ---------- Contact 팝오버 ---------- */
+  var cBtn = document.getElementById('contactBtn');
+  var cPop = document.getElementById('contactPop');
+
+  function popOpen(){ return !cPop.hidden; }
+  function closePop(){
+    cPop.hidden = true;
+    cBtn.setAttribute('aria-expanded', 'false');
+  }
+  function togglePop(){
+    var open = popOpen();
+    cPop.hidden = open;
+    cBtn.setAttribute('aria-expanded', String(!open));
+  }
+
+  cBtn.addEventListener('click', function(e){ e.stopPropagation(); togglePop(); });
+  cPop.addEventListener('click', function(e){ e.stopPropagation(); });
+  document.addEventListener('click', function(){ if (popOpen()) closePop(); });
+
+  cPop.addEventListener('click', function(e){
+    var btn = e.target.closest('.cp-copy');
+    if (!btn) return;
+    var txt = btn.dataset.copy;
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = '복사됨';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, function(){});
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+  });
+
   document.querySelectorAll('.proj[data-open]').forEach(function(btn){
     btn.addEventListener('click', function(){ openWin(btn.dataset.open); });
     btn.addEventListener('keydown', function(e){
@@ -1319,7 +1431,9 @@ a{color:inherit}
   });
 
   document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && order.length) closeWin(order[order.length - 1]);
+    if (e.key !== 'Escape') return;
+    if (popOpen()) { closePop(); return; }
+    if (order.length) closeWin(order[order.length - 1]);
   });
 
   window.addEventListener('resize', syncChrome);

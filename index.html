@@ -75,6 +75,8 @@ a{color:inherit}
 
 /* ---------- INTRO ---------- */
 .intro{padding:64px 0 14px}
+.intro-head{display:flex; align-items:center; justify-content:space-between; gap:36px}
+.intro-text{flex:1; min-width:0}
 .intro p{margin:0 0 10px; color:#C4CAD5; font-size:16px}
 .intro p:last-child{margin-bottom:0}
 .intro .hi{font-family:var(--disp); font-size:19px; font-weight:600; color:var(--text); margin-bottom:18px}
@@ -245,9 +247,9 @@ a{color:inherit}
 /* ---------- CONTACT ---------- */
 .contact-wrap{position:relative}
 .contact-btn{
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-size:12.5px; letter-spacing:.06em;
-  padding:7px 16px; border-radius:99px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:9px; white-space:nowrap;
+  font-family:var(--mono); font-size:13px; letter-spacing:.06em;
+  padding:10px 22px; border-radius:99px; cursor:pointer;
   background:var(--panel-2); border:1px solid var(--line-2); color:var(--muted);
   transition:color .16s, border-color .16s, background .16s;
 }
@@ -291,9 +293,12 @@ a{color:inherit}
 }
 .cp-copy:hover{color:var(--text); border-color:var(--line-2)}
 .cp-copy.done{color:var(--solder); border-color:var(--solder)}
-@media(max-width:520px){
-  .contact-pop{position:fixed; right:16px; left:16px; width:auto; top:64px}
-  .contact-pop::before{right:32px}
+@media(max-width:720px){
+  .intro-head{flex-direction:column; align-items:stretch; gap:26px}
+  .contact-wrap{width:100%}
+  .contact-btn{width:100%; justify-content:center; padding:11px 16px}
+  .contact-pop{left:0; right:auto; width:100%}
+  .contact-pop::before{left:28px; right:auto}
 }
 
 /* TASKBAR */
@@ -337,6 +342,26 @@ a{color:inherit}
 <header class="topbar">
   <div class="wrap">
     <a class="brand" href="#top">KKM<i>_</i>DEV</a>
+  </div>
+</header>
+
+<section class="banner" id="top">
+  <svg class="banner-pwm" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 96 H70 V56 H150 V96 H240 V56 H300 V96 H420 V56 H520 V96 H600 V56 H630 V96 H760 V56 H860 V96 H930 V56 H980 V96 H1100 V56 H1150 V96 H1200"/>
+  </svg>
+  <div class="wrap">
+    <h1>고경민의 포트폴리오<em>.</em></h1>
+    <p class="sub">EMBEDDED SW · FIRMWARE</p>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="wrap intro-head">
+    <div class="intro-text">
+      <p class="hi">안녕하세요.</p>
+      <p>이 페이지는 제가 진행한 임베디드·IoT 프로젝트를 정리한 포트폴리오입니다.</p>
+      <p>아래 카드를 누르면 프로젝트 기술서가 창으로 열립니다. 여러 개를 같이 열어 두고 비교하셔도 됩니다.</p>
+    </div>
     <div class="contact-wrap">
       <button class="contact-btn" type="button" id="contactBtn" aria-expanded="false" aria-controls="contactPop">
         <span class="dot"></span>Contact
@@ -353,26 +378,13 @@ a{color:inherit}
           <a class="cp-val" href="tel:01047136112">010-4713-6112</a>
           <button class="cp-copy" type="button" data-copy="010-4713-6112">복사</button>
         </div>
+        <div class="cp-row">
+          <svg class="cp-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <a class="cp-val" href="https://github.com/km226" target="_blank" rel="noopener noreferrer">github.com/km226</a>
+          <button class="cp-copy" type="button" data-copy="https://github.com/km226">복사</button>
+        </div>
       </div>
     </div>
-  </div>
-</header>
-
-<section class="banner" id="top">
-  <svg class="banner-pwm" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0 96 H70 V56 H150 V96 H240 V56 H300 V96 H420 V56 H520 V96 H600 V56 H630 V96 H760 V56 H860 V96 H930 V56 H980 V96 H1100 V56 H1150 V96 H1200"/>
-  </svg>
-  <div class="wrap">
-    <h1>고경민의 포트폴리오<em>.</em></h1>
-    <p class="sub">EMBEDDED SW · FIRMWARE</p>
-  </div>
-</section>
-
-<section class="intro">
-  <div class="wrap">
-    <p class="hi">안녕하세요.</p>
-    <p>이 페이지는 제가 진행한 임베디드·IoT 프로젝트를 정리한 포트폴리오입니다.</p>
-    <p>아래 카드를 누르면 프로젝트 기술서가 창으로 열립니다. 여러 개를 같이 열어 두고 비교하셔도 됩니다.</p>
   </div>
 </section>
 
@@ -1412,14 +1424,17 @@ a{color:inherit}
       btn.classList.add('done');
       setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1400);
     };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(txt).then(done, function(){});
-    } else {
+    var fallback = function(){
       var ta = document.createElement('textarea');
       ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
       document.body.appendChild(ta); ta.select();
       try { document.execCommand('copy'); done(); } catch (err) {}
       document.body.removeChild(ta);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, fallback);
+    } else {
+      fallback();
     }
   });
 

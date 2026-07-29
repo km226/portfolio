@@ -506,6 +506,92 @@ a{color:inherit}
       </div>
 
       <!-- ===== 03 ===== -->
+      <div class="proj" role="button" tabindex="0" data-open="fire" aria-label="YOLO 화재 조기 감지 시스템 기술서 열기">
+        <svg class="thumb" viewBox="0 0 480 260" aria-hidden="true">
+          <rect width="480" height="260" fill="#0D1015"/>
+          <g stroke="#1E2733" stroke-width="1">
+            <path d="M0 40H480M0 80H480M0 120H480M0 160H480M0 200H480M0 240H480"/>
+            <path d="M40 0V260M80 0V260M120 0V260M160 0V260M200 0V260M240 0V260M280 0V260M320 0V260M360 0V260M400 0V260M440 0V260"/>
+          </g>
+
+          <!-- 카메라 -->
+          <g>
+            <rect x="24" y="96" width="40" height="30" rx="4" fill="#161B23" stroke="#38414F" stroke-width="1.2"/>
+            <circle cx="44" cy="111" r="8" fill="none" stroke="#939BAB" stroke-width="1.4"/>
+            <circle cx="44" cy="111" r="3.5" fill="#4C5666"/>
+            <text x="44" y="140" font-family="monospace" font-size="8" fill="#6B7383" text-anchor="middle">WEBCAM</text>
+          </g>
+          <path d="M64 111 H86" stroke="#4C5666" stroke-width="1.3"/>
+          <path d="M86 111 l-7 -4 v8 z" fill="#4C5666"/>
+
+          <!-- ① EDGE: Jetson + YOLO -->
+          <rect x="88" y="70" width="96" height="82" rx="6" fill="#241B12" stroke="#D08B4C" stroke-width="1.5"/>
+          <text x="136" y="88" font-family="monospace" font-size="8.5" fill="#8A5A2E" text-anchor="middle">01 · EDGE</text>
+          <text x="136" y="106" font-family="monospace" font-size="11" fill="#D08B4C" text-anchor="middle">Jetson</text>
+          <!-- YOLO 바운딩박스 미니 -->
+          <rect x="106" y="116" width="60" height="28" rx="2" fill="#12161D" stroke="#38414F" stroke-width="0.8"/>
+          <rect x="116" y="122" width="16" height="16" fill="none" stroke="#E05B52" stroke-width="1.3"/>
+          <text x="124" y="120" font-family="monospace" font-size="6" fill="#E05B52" text-anchor="middle">fire</text>
+          <rect x="140" y="126" width="14" height="12" fill="none" stroke="#939BAB" stroke-width="1.1"/>
+          <text x="147" y="124" font-family="monospace" font-size="6" fill="#939BAB" text-anchor="middle">smoke</text>
+
+          <!-- 소켓 링크 → 서버 -->
+          <path d="M184 111 H214" stroke="#3FA98F" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <path d="M214 111 l-7 -4 v8 z" fill="#3FA98F"/>
+          <text x="199" y="104" font-family="monospace" font-size="7.5" fill="#3FA98F" text-anchor="middle">TCP</text>
+
+          <!-- ② SERVER: PC 중계 -->
+          <rect x="216" y="70" width="96" height="82" rx="6" fill="#132420" stroke="#3FA98F" stroke-width="1.5"/>
+          <text x="264" y="88" font-family="monospace" font-size="8.5" fill="#2E7D6B" text-anchor="middle">02 · SERVER</text>
+          <text x="264" y="106" font-family="monospace" font-size="11" fill="#3FA98F" text-anchor="middle">PC :5000</text>
+          <!-- 라우팅 노드 -->
+          <g stroke="#2E7D6B" stroke-width="1" fill="none">
+            <circle cx="240" cy="128" r="5"/><circle cx="264" cy="134" r="5"/><circle cx="288" cy="128" r="5"/>
+            <path d="M245 128 H283 M264 129 V70"/>
+          </g>
+          <text x="264" y="148" font-family="monospace" font-size="7" fill="#2E7D6B" text-anchor="middle">relay</text>
+
+          <!-- 분기: Qt 관제 (위) + STM32 (아래) -->
+          <path d="M312 96 H340 V56 H366" stroke="#4C5666" stroke-width="1.3" fill="none"/>
+          <path d="M366 56 l-7 -4 v8 z" fill="#4C5666"/>
+          <path d="M312 126 H340 V196 H366" stroke="#E0B341" stroke-width="1.3" fill="none" stroke-dasharray="5 4"/>
+          <path d="M366 196 l-7 -4 v8 z" fill="#E0B341"/>
+
+          <!-- Qt 관제 화면 -->
+          <rect x="368" y="34" width="88" height="60" rx="5" fill="#161B23" stroke="#38414F" stroke-width="1.2"/>
+          <path d="M368 46 H456" stroke="#38414F" stroke-width="1"/>
+          <circle cx="376" cy="40" r="2" fill="#4C5666"/>
+          <text x="412" y="43" font-family="monospace" font-size="7" fill="#6B7383" text-anchor="middle">Qt 관제</text>
+          <rect x="376" y="52" width="34" height="34" fill="#0D1015" stroke="#39435A" stroke-width="0.8"/>
+          <rect x="382" y="60" width="12" height="12" fill="none" stroke="#E05B52" stroke-width="1"/>
+          <g font-family="monospace" font-size="6" fill="#939BAB">
+            <text x="416" y="60">FPS 29</text><text x="416" y="70">FIRE x3</text><text x="416" y="80">history</text>
+          </g>
+
+          <!-- ③ ACTUATOR: STM32 경보 -->
+          <rect x="368" y="176" width="88" height="52" rx="5" fill="#161B23" stroke="#38414F" stroke-width="1.2"/>
+          <text x="412" y="192" font-family="monospace" font-size="8" fill="#E0B341" text-anchor="middle">03 · STM32</text>
+          <circle cx="386" cy="210" r="6" fill="none" stroke="#E05B52" stroke-width="1.4"/>
+          <text x="386" y="225" font-family="monospace" font-size="6" fill="#939BAB" text-anchor="middle">LED</text>
+          <path d="M404 204 a8 8 0 0 1 0 12 M410 200 a14 14 0 0 1 0 20" fill="none" stroke="#E0B341" stroke-width="1.2"/>
+          <text x="410" y="225" font-family="monospace" font-size="6" fill="#939BAB" text-anchor="middle">BUZZER</text>
+          <text x="440" y="210" font-family="monospace" font-size="7" fill="#6B7383" text-anchor="middle">ESP</text>
+          <text x="440" y="219" font-family="monospace" font-size="7" fill="#6B7383" text-anchor="middle">-01</text>
+        </svg>
+        <div class="proj-body">
+          <span class="idx">PROJECT 03 · 팀 프로젝트</span>
+          <h3>YOLO 화재 조기 감지 시스템</h3>
+          <p>카메라 영상을 YOLOv8로 실시간 분석해 발화 시점에 화재·연기를 감지하고, 현장 경보와 Qt 원격 관제까지 연결한 AI 엣지 시스템</p>
+          <div class="tags">
+            <span class="tag core">YOLOv8</span><span class="tag core">Python</span>
+            <span class="tag core">Qt</span><span class="tag core">TCP/IP</span>
+            <span class="tag">Jetson Nano</span><span class="tag">STM32</span>
+          </div>
+          <span class="open">기술서 열기</span>
+        </div>
+      </div>
+
+      <!-- ===== 04 ===== -->
       <div class="proj" role="button" tabindex="0" data-open="air" aria-label="실내환경 모니터링 및 환기 예측 시스템 기술서 열기">
         <svg class="thumb" viewBox="0 0 480 260" aria-hidden="true">
           <rect width="480" height="260" fill="#0D1015"/>
@@ -555,7 +641,7 @@ a{color:inherit}
           <text x="430" y="244" font-family="monospace" font-size="9.5" fill="#939BAB" text-anchor="end">LINEAR REGRESSION · RMSE 7.56</text>
         </svg>
         <div class="proj-body">
-          <span class="idx">PROJECT 03 · 2025.11 – 2025.12</span>
+          <span class="idx">PROJECT 04 · 2025.11 – 2025.12</span>
           <h3>실내환경 모니터링 및 환기 예측 시스템</h3>
           <p>온습도·조도·공기질·소리를 수집해 룰 기반으로 LED를 제어하고, 축적한 데이터를 분석해 환기 필요 상태까지 예측하는 엣지 시스템</p>
           <div class="tags">
@@ -567,7 +653,7 @@ a{color:inherit}
         </div>
       </div>
 
-      <!-- ===== 04 ===== -->
+      <!-- ===== 05 ===== -->
       <div class="proj" role="button" tabindex="0" data-open="cli" aria-label="STM32F411 임베디드 CLI 셸 기술서 열기">
         <svg class="thumb" viewBox="0 0 480 260" aria-hidden="true">
           <rect width="480" height="260" fill="#0D1015"/>
@@ -634,7 +720,7 @@ a{color:inherit}
         </div>
       </div>
 
-      <!-- ===== 05 ===== -->
+      <!-- ===== 06 ===== -->
       <div class="proj" role="button" tabindex="0" data-open="maze" aria-label="SDL2 미로 탐색 게임 기술서 열기">
         <svg class="thumb" viewBox="0 0 480 260" aria-hidden="true">
           <rect width="480" height="260" fill="#0D1015"/>
@@ -1155,6 +1241,75 @@ a{color:inherit}
   </div>
 </template>
 
+<template id="tpl-fire">
+  <div class="pane on" data-pane="0">
+    <p>화재는 초기 몇 분이 피해 규모를 결정함. 발생 직후 수 분 안의 감지·대응이 최종 피해를 좌우하고, 임계 온도 이후에는 공간 전체가 순간 발화(플래시오버)하며, 피해는 시간의 제곱에 비례해 커짐. 열방출률이 60초 169kW에서 300초 4,230kW(플래시오버 임계), 600초 16,920kW로 증가해 시간이 2배면 피해는 4배가 되는 구조임.</p>
+    <p>연기·열 감지기는 연기가 센서에 닿아야 반응해 확산을 기다려야 하고 실외·개방 공간에서는 사실상 무용함. 카메라 영상을 AI로 분석하면 확산을 기다리지 않고 불꽃이 보이는 발화 시점에 바로 감지할 수 있다는 점에 착안해, 감지에서 끝나지 않고 현장 경보와 원격 관제까지 이어지는 시스템을 2인 팀 프로젝트로 구현함. 저는 소켓 중계 서버, YOLO 모델 학습, Qt 관제 화면을 담당함.</p>
+    <h4>담당 역할</h4>
+    <ul>
+      <li><strong>소켓 중계 서버</strong> — 젯슨과 Qt 클라이언트를 하나의 서버에 묶는 TCP 중계 허브 구현</li>
+      <li><strong>YOLO 모델 학습</strong> — fire/smoke 2-클래스 커스텀 데이터셋 구축 및 YOLOv8 학습</li>
+      <li><strong>Qt 관제 화면</strong> — 실시간 상태·이력·캡처를 표시하는 관제 클라이언트 구현</li>
+    </ul>
+    <h4>시스템 구성</h4>
+    <ul>
+      <li><strong>EDGE — Jetson Nano</strong> — 웹캠 영상을 YOLOv8로 추론해 화재 판정, 결과·캡처를 서버로 전송</li>
+      <li><strong>SERVER — Windows PC</strong> — 젯슨·Qt 클라이언트를 묶는 TCP 중계 서버(포트 5000)</li>
+      <li><strong>ACTUATOR — STM32 + ESP-01</strong> — WiFi로 경보 신호 수신, LED·부저·LCD 현장 경보</li>
+    </ul>
+    <h4>사용 기술</h4>
+    <div class="stack-list">
+      <span class="tag core">Python</span><span class="tag core">YOLOv8</span>
+      <span class="tag core">Qt</span><span class="tag core">TCP/IP Socket</span>
+      <span class="tag">PyTorch</span><span class="tag">Jetson Nano</span>
+      <span class="tag">STM32</span><span class="tag">PlatformIO</span>
+      <span class="tag">Google Colab</span>
+    </div>
+  </div>
+
+  <div class="pane" data-pane="1">
+    <h4>1) 소켓 중계 서버 (PC / Python)</h4>
+    <ul>
+      <li><strong>스레드 기반 서버</strong> — threading으로 클라이언트 접속마다 별도 스레드를 생성해 젯슨·Qt 동시 접속 지원</li>
+      <li><strong>로그인 및 매핑</strong> — 최초 접속 시 <code>[ID:PASSWD]</code> 로그인 후 clients 딕셔너리에 ID–소켓 매핑</li>
+      <li><strong>메시지 라우팅</strong> — <code>[대상ID]메시지</code> 포맷을 파싱, ALL이면 본인을 제외한 전체에 전달</li>
+      <li><strong>콘솔 로그</strong> — 접속·해제·전달 성공/실패를 타임스탬프 로그로 출력</li>
+    </ul>
+
+    <h4>2) YOLO 화재·연기 감지 (Jetson)</h4>
+    <ul>
+      <li><strong>모델 학습</strong> — fire/smoke 2-클래스 커스텀 데이터셋 구축 후 총 25 epoch 학습</li>
+      <li><strong>성능</strong> — mAP50 약 0.71 (smoke 0.74 / fire 0.657), Precision 0.698 / Recall 0.657</li>
+      <li><strong>실시간 추론</strong> — 전처리 0.9ms + 추론 2.3ms + 후처리 1.2ms = 프레임당 4.4ms</li>
+      <li><strong>결과 전송</strong> — 감지 시 <code>[QTC]FIRE@신뢰도@시각</code> 포맷으로 서버 전송 → Qt로 중계, FPS 실시간 표시</li>
+    </ul>
+
+    <h4>3) Qt 관제 화면 &amp; STM32 경보</h4>
+    <ul>
+      <li><strong>Qt 관제</strong> — 서버 접속·젯슨 연결 상태, FPS·가동 시간·누적 화재 횟수 표시. 이력 테이블(일자/시각/종류/신뢰도), 행 클릭 시 캡처 장면 표시, CSV 내보내기</li>
+      <li><strong>STM32 경보</strong> — PlatformIO + Arduino, ST-Link로 통신. <code>"FIRE"</code> 수신 시 부저(PA0)·LED(PA1) 300ms 점멸, <code>"CLEAR"</code> 수신 시 LOW 고정</li>
+    </ul>
+  </div>
+
+  <div class="pane" data-pane="2">
+    <div class="issue">
+      <strong>① fire / smoke 2-클래스 학습이 안 되던 문제</strong>
+      <p>fire, smoke 2개로 학습했는데 모델이 계속 1개 클래스로만 인식하는 현상이 발생함. 데이터·순서·yaml이 다 맞았는데, <code>single_cls=True</code> 옵션이 모든 클래스를 하나로 합치면서 이 한 줄이 전부 무효화하고 있던 것이 원인.</p>
+      <p class="fix">→ 해당 옵션을 제거하고 재학습해 fire, smoke 2-클래스를 정상 인식</p>
+    </div>
+    <div class="issue">
+      <strong>② TCP 소켓 메시지 경계 처리</strong>
+      <p>젯슨–Qt 통신에서 알림이 몰릴 때 데이터가 깨져 파싱이 실패함. TCP는 메시지 경계가 없어 두 메시지가 붙어 오거나 하나가 잘려서 오는 것이 원인.</p>
+      <p class="fix">→ 버퍼에 누적한 뒤 개행(\n) 단위로 잘라서 처리해 유실·합쳐짐 방지</p>
+    </div>
+    <div class="issue">
+      <strong>③ 학습 환경 이전 (PC → Colab)</strong>
+      <p>PC에서 GPU 학습이 되지 않음. 설치된 PyTorch가 CPU 전용 빌드(+cpu)라 GPU가 있어도 사용할 수 없던 것이 원인.</p>
+      <p class="fix">→ 학습을 Colab GPU로 옮기고 data.yaml 경로를 Colab 환경에 맞게 재작성</p>
+    </div>
+  </div>
+</template>
+
 <script>
 (function () {
   'use strict';
@@ -1175,6 +1330,16 @@ a{color:inherit}
       role: 'Arduino 센서 노드 · 급식 제어 · 통신 연동',
       repo: 'https://github.com/km226/smart_pet_care_hub',
       tpl: 'tpl-pet'
+    },
+    fire: {
+      title: 'YOLO 화재 조기 감지 시스템',
+      path: 'projects / fire-detection-ai',
+      period: '팀 프로젝트 (2인)',
+      periodLabel: '구분',
+      role: '소켓 중계 서버 · YOLO 학습 · Qt 관제',
+      repo: 'https://github.com/km226/fire-detection-ai',
+      tabs: ['개요', '설계 및 구현', '트러블슈팅'],
+      tpl: 'tpl-fire'
     },
     air: {
       title: '실내환경 모니터링 및 환기 예측 시스템',
@@ -1280,7 +1445,7 @@ a{color:inherit}
         '<div class="meta">' +
           (d.note
             ? '<div>' + d.note + '</div>'
-            : '<div><span>기간</span>' + d.period + '</div>' +
+            : '<div><span>' + (d.periodLabel || '기간') + '</span>' + d.period + '</div>' +
               '<div><span>담당</span>' + d.role + '</div>') +
         '</div>' +
       '</div>' +

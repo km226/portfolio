@@ -438,7 +438,7 @@ a{color:inherit}
           <div class="tags">
             <span class="tag core">ROS2</span><span class="tag core">Nav2 · SLAM</span>
             <span class="tag">YOLOv8</span><span class="tag core">TurtleBot3</span>
-            <span class="tag core">RPLIDAR C2</span><span class="tag core">RealSense</span>
+            <span class="tag core">LDS-02</span><span class="tag core">RealSense</span>
             <span class="tag core">Python</span><span class="tag">STM32</span>
           </div>
           <span class="open">기술서 열기</span>
@@ -490,7 +490,7 @@ a{color:inherit}
             <span class="tag core">STM32</span><span class="tag">Arduino</span>
             <span class="tag core">FreeRTOS</span><span class="tag">C / C++</span>
             <span class="tag">Qt</span><span class="tag core">PWM</span>
-            <span class="tag">GPIO Interrupt</span>
+            <span class="tag">GPIO</span>
           </div>
           <span class="open">기술서 열기</span>
         </div>
@@ -545,7 +545,7 @@ a{color:inherit}
         <div class="proj-body">
           <span class="idx">PROJECT 03 · 2026.05 – 2026.06</span>
           <h3>스마트 펫 케어 허브</h3>
-          <p>반려동물 실내 환경을 실시간 모니터링하고 원격으로 사료를 배출하는 양방향 IoT 시스템. 네트워크가 끊겨도 기기 자체로 알림을 냄</p>
+          <p>반려동물 실내 환경을 실시간 모니터링하고 원격으로 사료를 배출하는 양방향 IoT 시스템. 임계값을 넘으면 기기에서 바로 LED·부저 알림을 냄</p>
           <div class="tags">
             <span class="tag core">Arduino UNO</span><span class="tag">C / C++</span>
             <span class="tag core">ESP-01</span><span class="tag core">TCP/IP</span>
@@ -953,7 +953,7 @@ a{color:inherit}
     <div class="stack-list">
       <span class="tag core">ROS2 Humble</span><span class="tag core">Nav2</span>
       <span class="tag core">Cartographer</span><span class="tag">YOLOv8</span>
-      <span class="tag core">TurtleBot3</span><span class="tag core">RPLIDAR C2</span>
+      <span class="tag core">TurtleBot3</span><span class="tag core">LDS-02</span>
       <span class="tag core">RealSense D435</span><span class="tag core">Python</span>
       <span class="tag">Flask</span><span class="tag">SQLite</span>
       <span class="tag">STM32</span><span class="tag">rclpy</span>
@@ -986,39 +986,40 @@ a{color:inherit}
 
   <div class="pane" data-pane="2">
     <div class="issue">
-      <strong>① 위급상황 문열림 신호가 유실됨</strong>
-      <p>서버가 보낸 DOOR_OPEN 신호를 STM32가 놓침. UART 폴링(<code>HAL_UART_Receive</code>) 방식이라 서보모터 구동 등 블로킹 구간 중 하드웨어 수신 버퍼(1바이트)가 덮어써져 데이터가 손실된 것이 원인.</p>
-      <p class="fix">→ 인터럽트(<code>HAL_UART_Receive_IT</code>) + 링버퍼 방식으로 전환해 블로킹 구간에도 안전하게 수신</p>
-    </div>
-    <div class="issue">
-      <strong>② 순찰 중 위치 추정 오차 누적</strong>
+      <strong>① 순찰 중 위치 추정 오차 누적</strong>
       <p>순찰을 반복할수록 로봇 위치가 조금씩 어긋남. 오도메트리(바퀴 슬립) 누적 드리프트가 원인.</p>
       <p class="fix">→ 매 바퀴 시작점 복귀 시 <code>/initialpose</code> 재발행으로 AMCL 위치를 재보정</p>
     </div>
     <div class="issue">
-      <strong>③ RealSense 다중 접속 시 스트림 실패</strong>
+      <strong>② RealSense 다중 접속 시 스트림 실패</strong>
       <p>여러 명이 웹에 접속하면 카메라 스트림이 끊김. 카메라는 한 프로세스만 독점 가능한데 접속자마다 pipeline을 다시 여는 것이 원인.</p>
       <p class="fix">→ 캡처 전용 스레드 1개 + 공유 프레임 버퍼 구조로 재설계, 다중 클라이언트는 버퍼만 읽도록 변경</p>
     </div>
     <div class="issue">
-      <strong>④ 컬러+뎁스 동시 스트리밍 시 프레임 드롭</strong>
+      <strong>③ 컬러+뎁스 동시 스트리밍 시 프레임 드롭</strong>
       <p>컬러와 뎁스를 함께 스트리밍하면 프레임이 밀리거나 처리가 실패함. USB 대역폭 부족이 원인.</p>
       <p class="fix">→ USB 3.0 포트 사용, 컬러/뎁스 공통 해상도(640×480)로 통일, 프레임레이트 조정</p>
     </div>
     <div class="issue">
-      <strong>⑤ 순찰 로직을 스크립트로만 구현 시 확장성 저하</strong>
+      <strong>④ 순찰 로직을 스크립트로만 구현 시 확장성 저하</strong>
       <p><code>time.sleep</code> 기반 블로킹 구조라 다른 노드와 통합이 어려웠음.</p>
       <p class="fix">→ <code>NavigateToPose</code> 액션 클라이언트 + 타이머 콜백 기반 정식 ROS2 노드(<code>patrol_pkg</code>)로 재구현</p>
+    </div>
+    <div class="issue">
+      <strong>⑤ [팀 공유] 위급상황 문열림 신호가 유실됨</strong>
+      <p>※ 출결·출입문(STM32) 파트 팀원이 해결하고 팀에 공유한 트러블슈팅</p>
+      <p>서버가 보낸 DOOR_OPEN 신호를 STM32가 놓침. UART 폴링(<code>HAL_UART_Receive</code>) 방식이라 서보모터 구동 등 블로킹 구간 중 하드웨어 수신 버퍼(1바이트)가 덮어써져 데이터가 손실된 것이 원인.</p>
+      <p class="fix">→ 인터럽트(<code>HAL_UART_Receive_IT</code>) + 링버퍼 방식으로 전환해 블로킹 구간에도 안전하게 수신</p>
     </div>
   </div>
 
   <div class="pane" data-pane="3">
     <ul>
-      <li><strong>실시간 수신은 폴링이 아니라 인터럽트로</strong> — 서보 구동 같은 블로킹 구간에서 UART 폴링은 수신 버퍼를 놓친다. 인터럽트 + 링버퍼로 바꿔야 어떤 상황에서도 신호를 안전하게 받을 수 있음을 배움.</li>
       <li><strong>누적 오차는 주기적으로 보정해야 한다</strong> — 오도메트리처럼 조금씩 쌓이는 오차는 방치하면 결국 동작을 망가뜨린다. 시작점 복귀 시 위치를 재보정하는 것처럼, 기준점을 주기적으로 다시 잡는 설계가 필요함을 배움.</li>
       <li><strong>독점 자원은 공유 구조로 감싸야 한다</strong> — 카메라처럼 한 프로세스만 쓸 수 있는 자원에 여러 요청이 몰리면 충돌한다. 캡처 전용 스레드 하나가 자원을 쥐고 나머지는 버퍼만 읽게 하는 구조로 동시 접근 문제를 풀 수 있음을 배움.</li>
       <li><strong>대역폭·해상도 같은 물리 제약을 먼저 본다</strong> — 컬러+뎁스 동시 스트리밍의 프레임 드롭은 코드가 아니라 USB 대역폭이 원인이었다. 소프트웨어를 파기 전에 하드웨어 제약부터 점검하는 습관이 생김.</li>
       <li><strong>재사용·확장을 생각하면 정식 구조로 짠다</strong> — 순찰 로직을 스크립트가 아닌 ROS2 노드로 만들면서, 당장 동작하는 코드보다 다른 노드와 통합되고 확장 가능한 구조가 팀 프로젝트에서 훨씬 값지다는 걸 체감함.</li>
+      <li><strong>실시간 수신은 폴링이 아니라 인터럽트로 (팀 공유 사례)</strong> — 팀원의 DOOR_OPEN 유실 트러블슈팅을 공유받으며, 서보 구동 같은 블로킹 구간에서 UART 폴링은 수신 버퍼를 놓치고 인터럽트 + 링버퍼로 받아야 안전하다는 것을 배움.</li>
     </ul>
   </div>
 </template>
@@ -1045,7 +1046,7 @@ a{color:inherit}
       <span class="tag core">STM32</span><span class="tag">Arduino</span><span class="tag core">C</span>
       <span class="tag">C++</span><span class="tag core">FreeRTOS</span><span class="tag">Qt</span>
       <span class="tag">UART</span><span class="tag">I2C</span><span class="tag core">PWM</span>
-      <span class="tag">GPIO Interrupt</span><span class="tag">Git</span>
+      <span class="tag">GPIO</span><span class="tag">Git</span>
     </div>
   </div>
 
@@ -1053,7 +1054,7 @@ a{color:inherit}
     <ul>
       <li><strong>PWM 채널 분리</strong> — TIM2 CH1(이송 서보)과 TIM2 CH2(분류 서보)를 분리해 각 채널의 CCR 레지스터를 독립 제어. 펄스폭 변경만으로 이송 속도와 분류 방향을 조정하도록 구현함.</li>
       <li><strong>이벤트 기반 흐름 제어</strong> — Rail Task가 EventGroup(EVT_WEIGHT_OK)을 수신하면 이송 서보를 구동하고, 위치 센서 감지 시 분류 서보를 목표 방향으로 전환한 뒤 EVT_POSITION_OK를 세팅해 RobotArm Task로 흐름을 넘김.</li>
-      <li><strong>비상 처리 우선순위</strong> — PIR 센서 인터럽트 발생 시 우선순위가 가장 높은 비상 처리 루틴에서 컨베이어·로봇팔을 즉시 정지시키고 FSM 상태를 EMERGENCY로 전환함.</li>
+      <li><strong>PIR 비상 정지</strong> — PIR 입력을 주기적으로 읽어 이전 상태와 비교하고, LOW→HIGH로 바뀌는 순간에만 비상정지를 실행하는 엣지 감지 방식으로 구현함. 동작 플래그 차단과 컨베이어 PWM 출력 정지로 이중으로 멈춘 뒤 FSM 상태를 EMERGENCY로 전환하고, 감지가 해제되어도 CLI에 <code>system on</code>을 입력해야만 재가동되도록 함. 감지 각도가 넓어 작업 영역 밖 움직임에도 반응하던 문제는 센서 렌즈를 종이로 감싸 감지 범위를 좁혀 해결함.</li>
     </ul>
   </div>
 
@@ -1066,7 +1067,7 @@ a{color:inherit}
     <div class="issue">
       <strong>2) 서보 Dead-band로 인한 저속 구간 미동작</strong>
       <p>정지 후 고정 저속 후진(1450us)으로 동작을 단순화한 뒤에도 서보가 물리적으로 움직이지 않는 현상이 이어짐. 해당 pulse 값이 서보의 기계적 Dead-band 구간에 걸쳐 있어, 신호는 정상 출력되지만 모터가 반응하지 않는 것이 원인.</p>
-      <p class="fix">→ CLI에 <code>conv pulse [us]</code> 서브커맨드를 추가하고 1300 → 1200 → 1100us 순으로 낮춰가며 실제로 동작하는 pulse 값을 실측으로 확인해 확정</p>
+      <p class="fix">→ CLI에 <code>conv pulse [us]</code> 서브커맨드를 추가하고 1300us부터 단계적으로 낮춰가며 실제 동작을 실측으로 확인해 최종 900us로 확정</p>
     </div>
     <div class="issue">
       <strong>3) CLI 응답 지연 및 로봇팔 Task 통합 문제</strong>
@@ -1090,7 +1091,7 @@ a{color:inherit}
 <template id="tpl-pet">
   <div class="pane on" data-pane="0">
     <p>반려동물의 단독 방치 시간이 늘어나면서 급식·급수와 실내 환경 상태를 실시간으로 확인하기 어렵고, 기능별 장치가 분산되어 있어 이상 상황에 능동적으로 대응하기 어렵다는 문제가 있었음. 모니터링과 제어를 하나로 묶은 스마트 펫 케어 허브를 팀 프로젝트로 진행했으며, Arduino UNO 기반 센서 노드와 급식 제어 파트를 담당함.</p>
-    <p>Arduino UNO에서 온·습도, 수위, 소리 데이터를 5초 주기로 수집해 ESP-01 WiFi 모듈을 통해 라즈베리파이 TCP 서버로 전송하고, 서버는 이를 MariaDB에 저장한 뒤 웹 대시보드와 모바일 앱으로 전달함. 반대로 사용자가 원격 급식을 요청하면 서버 명령이 Arduino로 전달되어 서보모터가 사료를 배출하는 양방향 구조임. 서버 통신과 무관하게 임계값 초과 상황에서는 Arduino가 자체적으로 RGB LED와 Buzzer로 즉시 알림을 내보내도록 구성해, 네트워크 지연·단절 시에도 최소한의 대응이 가능하도록 구성함.</p>
+    <p>Arduino UNO에서 온·습도, 수위, 소리 데이터를 5초 주기로 수집해 ESP-01 WiFi 모듈을 통해 라즈베리파이 TCP 서버로 전송하고, 서버는 이를 MariaDB에 저장한 뒤 웹 대시보드와 모바일 앱으로 전달함. 반대로 사용자가 원격 급식을 요청하면 서버 명령이 Arduino로 전달되어 서보모터가 사료를 배출하는 양방향 구조임. 임계값 초과 상황에서는 서버 판단을 기다리지 않고 Arduino가 직접 RGB LED와 Buzzer로 즉시 알림을 내보내도록 구성함.</p>
     <h4>담당 역할</h4>
     <ul>
       <li><strong>센서 노드 구현</strong> — Arduino UNO 기반 DHT11(온·습도)·Water Level(수위)·Sound(소리) 데이터 5초 주기 수집</li>
@@ -1109,7 +1110,7 @@ a{color:inherit}
 
   <div class="pane" data-pane="1">
     <ul>
-      <li><strong>비 블로킹 주기 제어</strong> — delay() 대신 millis() 기반 경과 시간 비교로 센서 수집(5초), 급식 동작, 알림 출력을 각각 독립 주기로 처리해 서보모터 동작 중에도 센서 수집과 통신이 멈추지 않도록 구현함.</li>
+      <li><strong>비 블로킹 주기 제어</strong> — 센서 수집(5초) 같은 주기 작업을 delay() 대신 millis() 기반 경과 시간 비교로 스케줄링해 작업끼리 서로 막지 않도록 구현함. 급식·부저처럼 짧게 끝나는 동작에만 수백 ms 수준의 delay()를 남김.</li>
       <li><strong>센서별 처리 방식 분리</strong> — DHT11과 수위 센서는 주기 샘플링 값을 그대로 사용하고, 노이즈에 민감한 Sound 센서는 20회 다중 샘플링 필터를 거친 결과만 감지로 인정함.</li>
       <li><strong>임계값 판단 및 로컬 알림</strong> — 수위 부족·고온 조건을 Arduino 내부에서 직접 판단해 RGB LED 색상(정상/주의/이상)과 Buzzer 경보를 즉시 출력하고, 동일 상태를 서버로도 전송해 웹·모바일 알림과 이중화함.</li>
       <li><strong>급식 제어 및 이력 전송</strong> — 급식 명령 패킷을 수신하면 서보모터를 지정 각도로 회전시켜 사료를 배출하고, 완료 후 급식 이력을 서버로 되돌려 보내 DB에 기록함.</li>
@@ -1126,7 +1127,7 @@ a{color:inherit}
     <div class="issue">
       <strong>2) Sound 센서 오검출</strong>
       <p>조용한 환경에서도 소리 감지가 지속적으로 발생해 LED·부저 알림이 계속 울림. 센서 값을 1회만 읽어 임계값과 비교하는 구조였기 때문에, 전원 노이즈나 순간적인 진동 같은 단발성 신호가 그대로 감지로 판정된 것이 원인.</p>
-      <p class="fix">→ 한 번의 판단에 20회 연속 샘플링을 수행하고 다수 조건을 만족할 때만 감지로 인정하는 필터를 적용</p>
+      <p class="fix">→ 한 번의 판단에 20회 연속 샘플링(10ms 간격)을 수행하고 20회 모두 감지된 경우에만 감지로 인정하는 필터를 적용</p>
     </div>
     <div class="issue">
       <strong>3) 급식 정확도 및 자동화 한계</strong>
@@ -1420,7 +1421,7 @@ a{color:inherit}
     <ul>
       <li><strong>모델 학습</strong> — fire/smoke 2-클래스 커스텀 데이터셋 구축 후 총 25 epoch 학습</li>
       <li><strong>성능</strong> — mAP50 약 0.71 (smoke 0.74 / fire 0.657), Precision 0.698 / Recall 0.657</li>
-      <li><strong>실시간 추론</strong> — 전처리 0.9ms + 추론 2.3ms + 후처리 1.2ms = 프레임당 4.4ms</li>
+      <li><strong>추론 속도 (Colab GPU 검증 기준)</strong> — 전처리 0.9ms + 추론 2.3ms + 후처리 1.2ms = 프레임당 4.4ms</li>
       <li><strong>결과 전송</strong> — 감지 시 <code>[QTC]FIRE@신뢰도@시각</code> 포맷으로 서버 전송 → Qt로 중계, FPS 실시간 표시</li>
     </ul>
 
